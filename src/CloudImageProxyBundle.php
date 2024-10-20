@@ -32,10 +32,9 @@ class CloudImageProxyBundle extends AbstractBundle
                 ->arrayNode('proxy')->isRequired()
                     ->children()
                         ->scalarNode('assets_path')->isRequired()->end()
-                        ->booleanNode('check_assets')->defaultTrue()->end()
                         ->scalarNode('url')->isRequired()->end()
+                        ->booleanNode('check_assets')->defaultTrue()->end()
                         ->booleanNode('encrypted_parameters')->defaultFalse()->end()
-                        ->scalarNode('secret')->defaultValue('')->end()
                     ->end()
                 ->end() // proxy
                 ->arrayNode('encrypter')->addDefaultsIfNotSet()
