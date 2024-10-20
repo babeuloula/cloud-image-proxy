@@ -30,6 +30,24 @@ return [
 ];
 ```
 
+### Step 3: Configure the Bundle
+
+```yaml
+# config/packages/cloud_image_proxy.yaml
+
+cloud_image_proxy:
+    proxy:
+        assets_path: 'mandatory'
+        url: 'mandatory'
+        check_assets: true # if the bundle need to check if you have the file on the server before fetch from CloudImage
+        encrypted_parameters: false # if you need to hide the query parameters on your application
+    encrypter:
+        secret_key: null # the key encrypting and decrypting the query parameters (required if proxy.encrypted_parameters is true)
+    twig:
+        route_name: 'mandatory' # the route to the controller that displays the assets
+        route_parameter: 'mandatory' # the route parameter name
+```
+
 Contributing
 ============
 
