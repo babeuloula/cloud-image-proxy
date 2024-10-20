@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    BaBeuloula\CloudImageProxy\Proxy:
+        public: true
+
+    BaBeuloula\CloudImageProxy\Encrypter: ~
+
+    BaBeuloula\CloudImageProxy\Twig\Extension\ProxyExtension: ~

@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @author      BaBeuloula <info@babeuloula.fr>
+ * @copyright   Copyright (c) BaBeuloula
+ * @license     MIT
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace BaBeuloula\CloudImageProxy;
+
+use BaBeuloula\CloudImageProxy\Twig\Extension\ProxyExtension;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+
+class CloudImageProxyBundle extends AbstractBundle
+{
+    public function configure(DefinitionConfigurator $definition): void
+    {
+        /** @var ArrayNodeDefinition $treeBuilder */
+        $treeBuilder = $definition->rootNode();
+
+        $treeBuilder
+            ->children()
+                ->arrayNode('proxy')
+                    ->children()
+                        ->scalarNode('assets_path')->end()
+                        ->booleanNode('check_assets')->defaultTrue()->end()
+                        ->scalarNode('url')->end()
+                        ->booleanNode('encrypted_parameters')->defaultFalse()->end()
+                        ->scalarNode('secret')->defaultValue('')->end()
+                    ->end()
+                ->end() // proxy
+                ->arrayNode('encrypter')
+                    ->children()
+                        ->scalarNode('secret_key')->defaultNull()->end()
+                    ->end()
+                ->end() // encrypter
+                ->arrayNode('twig')
+                    ->children()
+                        ->scalarNode('route_name')->end()
+                        ->scalarNode('route_parameter')->end()
+                    ->end()
+                ->end() // twig
+            ->end()
+        ;
+    }
+
+    /** @param array<string, mixed> $config */
+    // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        $container->import('../config/services.yaml');
+
+        $container->services()
+            ->get(Proxy::class)
+                ->public()
+                ->arg('$assetsPath', $config['proxy']['assets_path'])
+                ->arg('$checkAssets', $config['proxy']['check_assets'])
+                ->arg('$cloudImageUrl', $config['proxy']['url'])
+        ;
+
+        $container->services()
+            ->get(Encrypter::class)
+                ->public()
+                ->arg('$secretKey', $config['encrypter']['secret_key'])
+        ;
+
+        $container->services()
+            ->get(ProxyExtension::class)
+                ->arg('$routeName', $config['twig']['route_name'])
+                ->arg('$routeParameter', $config['twig']['route_parameter'])
+        ;
+    }
+}
