@@ -29,24 +29,24 @@ class CloudImageProxyBundle extends AbstractBundle
 
         $treeBuilder
             ->children()
-                ->arrayNode('proxy')
+                ->arrayNode('proxy')->isRequired()
                     ->children()
-                        ->scalarNode('assets_path')->end()
+                        ->scalarNode('assets_path')->isRequired()->end()
                         ->booleanNode('check_assets')->defaultTrue()->end()
-                        ->scalarNode('url')->end()
+                        ->scalarNode('url')->isRequired()->end()
                         ->booleanNode('encrypted_parameters')->defaultFalse()->end()
                         ->scalarNode('secret')->defaultValue('')->end()
                     ->end()
                 ->end() // proxy
-                ->arrayNode('encrypter')
+                ->arrayNode('encrypter')->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('secret_key')->defaultNull()->end()
                     ->end()
                 ->end() // encrypter
-                ->arrayNode('twig')
+                ->arrayNode('twig')->isRequired()
                     ->children()
-                        ->scalarNode('route_name')->end()
-                        ->scalarNode('route_parameter')->end()
+                        ->scalarNode('route_name')->isRequired()->end()
+                        ->scalarNode('route_parameter')->isRequired()->end()
                     ->end()
                 ->end() // twig
             ->end()
