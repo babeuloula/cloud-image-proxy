@@ -40,12 +40,20 @@ final class Options
             'width' => $this->width,
             'height' => $this->height,
             'org_if_sml' => (true === $this->preventEnlargement) ? '1' : '0',
-            'wat' => (true === \is_string($this->watermarkUrl)) ? '1' : null,
-            'wat_url' => $this->watermarkUrl,
-            'wat_gravity' => $this->watermarkGravity,
-            'wat_scale' => $this->watermarkScale,
-            'wat_opacity' => $this->watermarkOpacity,
         ];
+
+        if (true === \is_string($this->watermarkUrl)) {
+            $options = array_merge(
+                $options,
+                [
+                    'wat' => '1',
+                    'wat_url' => $this->watermarkUrl,
+                    'wat_gravity' => $this->watermarkGravity,
+                    'wat_scale' => $this->watermarkScale,
+                    'wat_opacity' => $this->watermarkOpacity,
+                ],
+            );
+        }
 
         return http_build_query(array_filter($options));
     }

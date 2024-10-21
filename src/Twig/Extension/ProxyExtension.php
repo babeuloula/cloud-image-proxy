@@ -38,11 +38,17 @@ final class ProxyExtension extends AbstractExtension
     }
 
     /** @param array<string, mixed> $options */
-    public function cloudImage(string $file, array $options = []): string
+    public function cloudImage(string $file, array $options = [], bool $enableEncrypter = true): string
     {
+        $queryParams = Options::fromArray($options)->buildQuery();
+        $queryParams = (true === $enableEncrypter)
+            ? $this->encrypter->encrypt($queryParams)
+            : '?' . $queryParams
+        ;
+
         return $this->router->generate(
             $this->routeName,
             [$this->routeParameter => $file]
-        ) . $this->encrypter->encrypt(Options::fromArray($options)->buildQuery());
+        ) . $queryParams;
     }
 }
