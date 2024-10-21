@@ -26,7 +26,7 @@ final class Encrypter
 
     public function isEnabled(): bool
     {
-        return \is_string($this->secretKey);
+        return \strlen($this->getSecretKey()) > 0;
     }
 
     public function encrypt(string $data): string
@@ -45,8 +45,8 @@ final class Encrypter
      */
     public function decrypt(array $parameters): array
     {
-        if (true === $this->isEnabled()) {
-            $data = Crypto::decryptWithPassword($parameters[self::PARAMETER_KEY] ?? '', $this->getSecretKey());
+        if (true === $this->isEnabled() && true === \array_key_exists(self::PARAMETER_KEY, $parameters)) {
+            $data = Crypto::decryptWithPassword($parameters[self::PARAMETER_KEY], $this->getSecretKey());
             parse_str($data, $parameters);
 
             return $parameters;
