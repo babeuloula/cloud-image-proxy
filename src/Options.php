@@ -24,13 +24,13 @@ final class Options
     private const DEFAULT_WATERMARK_OPACITY = 0.5;
 
     public function __construct(
-        private readonly null|int|string $width = self::DEFAULT_WIDTH,
-        private readonly null|int|string $height = self::DEFAULT_HEIGHT,
-        private readonly bool $preventEnlargement = self::DEFAULT_PREVENT_ENLARGEMENT,
-        private readonly ?string $watermarkUrl = self::DEFAULT_WATERMARK_URL,
-        private readonly string $watermarkGravity = self::DEFAULT_WATERMARK_GRAVITY,
-        private readonly string $watermarkScale = self::DEFAULT_WATERMARK_SCALE,
-        private readonly float $watermarkOpacity = self::DEFAULT_WATERMARK_OPACITY,
+        public readonly null|int|string $width = self::DEFAULT_WIDTH,
+        public readonly null|int|string $height = self::DEFAULT_HEIGHT,
+        public readonly bool $preventEnlargement = self::DEFAULT_PREVENT_ENLARGEMENT,
+        public readonly ?string $watermarkUrl = self::DEFAULT_WATERMARK_URL,
+        public readonly string $watermarkGravity = self::DEFAULT_WATERMARK_GRAVITY,
+        public readonly string $watermarkScale = self::DEFAULT_WATERMARK_SCALE,
+        public readonly float $watermarkOpacity = self::DEFAULT_WATERMARK_OPACITY,
     ) {
     }
 
