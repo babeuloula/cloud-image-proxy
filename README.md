@@ -48,6 +48,25 @@ cloud_image_proxy:
         route_parameter: 'mandatory' # the route parameter name
 ```
 
+Using a fallback handler
+========================
+
+If you don't have access to CloudImage or if you want to use it on local development, you can set up a fallback handler.
+
+Actually, I only support [Intervention Image v3](https://image.intervention.io/v3).
+
+```yaml
+Intervention\Image\Drivers\Imagick\Driver: ~
+
+BaBeuloula\CloudImageProxy\FallbackHandler\InterventionImageFallbackHandler:
+    arguments:
+        $assetsPath: '_your_path_'
+        $driver: '@Intervention\Image\Drivers\Imagick\Driver'
+        $cache: '_your_cache_instance_'
+
+BaBeuloula\CloudImageProxy\FallbackHandler\FallbackHandlerInterface: '@BaBeuloula\CloudImageProxy\FallbackHandler\InterventionImageFallbackHandler'
+```
+
 Contributing
 ============
 

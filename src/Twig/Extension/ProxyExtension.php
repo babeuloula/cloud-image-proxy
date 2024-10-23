@@ -15,6 +15,7 @@ namespace BaBeuloula\CloudImageProxy\Twig\Extension;
 
 use BaBeuloula\CloudImageProxy\Encrypter;
 use BaBeuloula\CloudImageProxy\Options;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -48,7 +49,8 @@ final class ProxyExtension extends AbstractExtension
 
         return $this->router->generate(
             $this->routeName,
-            [$this->routeParameter => $file]
+            [$this->routeParameter => $file],
+            UrlGeneratorInterface::ABSOLUTE_URL,
         ) . $queryParams;
     }
 }

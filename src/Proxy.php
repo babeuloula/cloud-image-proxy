@@ -15,45 +15,24 @@ namespace BaBeuloula\CloudImageProxy;
 
 use BaBeuloula\CloudImageProxy\Exception\FetchAssetException;
 use BaBeuloula\CloudImageProxy\Exception\FileNotFoundException;
+use BaBeuloula\CloudImageProxy\FallbackHandler\FallbackHandlerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class Proxy
+final class Proxy extends AbstractHandler
 {
-    private string $assetsPath;
-
     public function __construct(
         string $assetsPath,
         private readonly bool $checkAssets,
         private readonly Filesystem $filesystem,
         private readonly HttpClientInterface $client,
         private readonly string $cloudImageUrl,
+        private readonly ?FallbackHandlerInterface $fallbackHandler = null,
     ) {
-        $this->assetsPath = rtrim($assetsPath, '/') . '/';
-    }
-
-    /** @return array<string, mixed> */
-    public function parseHeaders(Request $request): array
-    {
-        $requestedHeaders = [
-            'accept-language',
-            'accept-encoding',
-            'accept',
-            'user-agent',
-        ];
-
-        $headers = [];
-
-        foreach ($requestedHeaders as $header) {
-            if (true === $request->headers->has($header)) {
-                $headers[$header] = $request->headers->get($header, '');
-            }
-        }
-
-        return $headers;
+        parent::__construct($assetsPath);
     }
 
     /** @param array<string, mixed> $headers */
@@ -95,6 +74,10 @@ final class Proxy
                 $newResponse->headers->set($header, $response->getHeaders()[$header]);
             }
         } catch (\Throwable $e) {
+            if ($this->fallbackHandler instanceof FallbackHandlerInterface) {
+                return $this->fallbackHandler->response($file, $options, $headers);
+            }
+
             if (Response::HTTP_NOT_FOUND === $e->getCode()) {
                 throw new NotFoundHttpException(previous: $e);
             }
@@ -108,10 +91,5 @@ final class Proxy
     private function exists(string $file): bool
     {
         return $this->filesystem->exists($this->assetsPath . $this->normalizeFile($file));
-    }
-
-    private function normalizeFile(string $file): string
-    {
-        return ltrim($file, '/');
     }
 }
