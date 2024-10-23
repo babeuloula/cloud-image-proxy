@@ -17,7 +17,7 @@ use Defuse\Crypto\Crypto;
 
 final class Encrypter
 {
-    private const PARAMETER_KEY = 'data';
+    public const PARAMETER_KEY = 'data';
 
     public function __construct(
         private readonly ?string $secretKey = null,
