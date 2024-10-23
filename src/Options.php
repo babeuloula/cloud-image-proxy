@@ -58,7 +58,7 @@ final class Options
         return http_build_query(array_filter($options));
     }
 
-    /** @param array<string, mixed> $options */
+    /** @param array<int|string, mixed> $options */
     public static function fromArray(array $options): self
     {
         return new self(

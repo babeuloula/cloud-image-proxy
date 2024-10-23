@@ -4,7 +4,10 @@ services:
         autoconfigure: true
 
     BaBeuloula\CloudImageProxy\Proxy:
+        parent: 'BaBeuloula\CloudImageProxy\AbstractHandler'
         public: true
+
+    BaBeuloula\CloudImageProxy\AbstractHandler: ~
 
     BaBeuloula\CloudImageProxy\Encrypter: ~
 
