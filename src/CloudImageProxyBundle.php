@@ -67,7 +67,7 @@ class CloudImageProxyBundle extends AbstractBundle
         ;
 
         $container->services()
-            ->get(Encrypter::class)
+            ->get(Signer::class)
                 ->public()
                 ->arg('$secretKey', $config['encrypter']['secret_key'])
         ;

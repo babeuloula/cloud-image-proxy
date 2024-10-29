@@ -9,6 +9,6 @@ services:
 
     BaBeuloula\CloudImageProxy\AbstractHandler: ~
 
-    BaBeuloula\CloudImageProxy\Encrypter: ~
+    BaBeuloula\CloudImageProxy\Signer: ~
 
     BaBeuloula\CloudImageProxy\Twig\Extension\ProxyExtension: ~
