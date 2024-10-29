@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace BaBeuloula\CloudImageProxy\Twig\Extension;
 
-use BaBeuloula\CloudImageProxy\Encrypter;
 use BaBeuloula\CloudImageProxy\Options;
+use BaBeuloula\CloudImageProxy\Signer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
@@ -26,7 +26,7 @@ final class ProxyExtension extends AbstractExtension
         private readonly RouterInterface $router,
         private readonly string $routeName,
         private readonly string $routeParameter,
-        private readonly Encrypter $encrypter,
+        private readonly Signer $encrypter,
     ) {
     }
 
@@ -41,10 +41,10 @@ final class ProxyExtension extends AbstractExtension
     /** @param array<string, mixed> $options */
     public function cloudImage(string $file, array $options = [], bool $enableEncrypter = true): string
     {
-        $queryParams = Options::fromArray($options)->buildQuery();
+        $options = Options::fromArray($options);
         $queryParams = (true === $enableEncrypter)
-            ? $this->encrypter->encrypt($queryParams)
-            : '?' . $queryParams
+            ? '?' . $this->encrypter->sign($options)
+            : '?' . $options->buildQuery()
         ;
 
         return $this->router->generate(
