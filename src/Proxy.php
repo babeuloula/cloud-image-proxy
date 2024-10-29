@@ -49,7 +49,7 @@ final class Proxy extends AbstractHandler
         try {
             $response = $this->client->request(
                 Request::METHOD_GET,
-                $this->cloudImageUrl . $file . '?' . ($options?->buildQuery() ?? ''),
+                $this->cloudImageUrl . $file . '?' . ($options?->buildQuery(false) ?? ''),
                 [
                     'headers' => $headers,
                 ],
