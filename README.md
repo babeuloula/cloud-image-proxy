@@ -1,5 +1,9 @@
 # CloudImage Proxy
 
+CloudImage Proxy is a Symfony bundle for linking your application to Cloud Image.
+
+Cloud Image is a service that lets you resize and apply filters to your images, but it's also a CDN. It will therefore accelerate the loading of your assets (images or resources).
+
 Installation
 ============
 
